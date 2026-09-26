@@ -1,38 +1,33 @@
-# .
+# Job Application Tracker
 
-This template should help get you started developing with Vue 3 in Vite.
+A web application for organising job applications, built with Vue 3
+and JavaScript as part of my web development portfolio.
 
-## Recommended IDE Setup
+## Features
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Add applications with a company, position, date, and optional job link
+- Edit application details
+- Track statuses: Applied, Interview, Offer, and Rejected
+- Search by company and filter by status
+- View application totals
+- Sort applications by newest application date
+- Confirm before deleting an application
+- Save applications in the browser using localStorage
 
-## Recommended Browser Setup
+## Technologies
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+- Vue 3 Composition API
+- JavaScript
+- HTML and CSS
+- Vite
+- Git and GitHub
 
-## Customize configuration
+## Run locally
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+Install Node.js and npm, then run:
 
-## Project Setup
-
-```sh
+```bash
+git clone https://github.com/kyrian-dev/job-application-tracker.git
+cd job-application-tracker
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
