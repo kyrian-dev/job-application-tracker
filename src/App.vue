@@ -4,11 +4,38 @@ import { ref, watch, computed, h } from 'vue'
 const company = ref('')
 const position = ref('')
 const applicationDate = ref('')
+const interviewDate = ref('')
 const jobLink = ref('')
 const editingId = ref(null)
 
 const search = ref('')
 const statusFilter = ref('All')
+
+
+const isDarkMode = ref(
+  localStorage.getItem('job-tracker-theme') === 'dark'
+)
+
+function toggleDarkMode() {
+  isDarkMode.value = !isDarkMode.value
+}
+
+watch(
+  isDarkMode,
+  (enabled) => {
+    document.documentElement.setAttribute(
+      'data-theme',
+      enabled ? 'dark' : 'light'
+    )
+
+    localStorage.setItem(
+      'job-tracker-theme',
+      enabled ? 'dark' : 'light'
+    )
+  },
+  { immediate: true }
+)
+
 
 const savedApplications = localStorage.getItem('applications')
 const applications = ref(
@@ -32,12 +59,15 @@ function addApplication() {
 
   if (!companyName || !jobTitle) return
 
-  const details = {
-    company: companyName,
-    position: jobTitle,
-    date: applicationDate.value,
-    jobLink: jobLink.value.trim(),
-  }
+  
+const details = {
+  company: companyName,
+  position: jobTitle,
+  date: applicationDate.value,
+  interviewDate: interviewDate.value,
+  jobLink: jobLink.value.trim(),
+}
+
 
   if (editingId.value !== null) {
     const application = applications.value.find(
@@ -130,10 +160,48 @@ const applicationStats = computed(() => ({
   ).length,
 }))
 
+
+const chartData = computed(() => {
+  const total = applications.value.length
+
+  const statuses = [
+    { label: 'Applied', color: 'applied' },
+    { label: 'Interview', color: 'interview' },
+    { label: 'Offer', color: 'offer' },
+    { label: 'Rejected', color: 'rejected' },
+  ]
+
+  return statuses.map((item) => {
+    const count = applications.value.filter(
+      (app) => app.status === item.label
+    ).length
+
+    return {
+      ...item,
+      count,
+      percentage: total > 0
+        ? (count / total) * 100
+        : 0,
+    }
+  })
+})
+
+
 </script>
 
 <template>
   <main>
+
+<div class="theme-switch">
+  <button
+    type="button"
+    class="theme-toggle"
+    @click="toggleDarkMode"
+  >
+    {{ isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode' }}
+  </button>
+</div>
+
     <h1>Job Application Tracker</h1>
     <p>Keep track of your applications and interviews.</p>
     <div class="stats">
@@ -157,6 +225,41 @@ const applicationStats = computed(() => ({
     <span>Offers</span>
   </div>
 </div>
+
+
+<section class="analytics-panel">
+  <div class="analytics-header">
+    <div>
+      <h2>Application Analytics</h2>
+      <p>Track your job application progress</p>
+    </div>
+    <span class="analytics-total">
+      {{ applicationStats.total }} Total
+    </span>
+  </div>
+
+  <div class="analytics-chart">
+    <div
+      v-for="item in chartData"
+      :key="item.label"
+      class="analytics-row"
+    >
+      <div class="analytics-label">
+        <span>{{ item.label }}</span>
+        <strong>{{ item.count }}</strong>
+      </div>
+
+      <div class="analytics-track">
+        <div
+          class="analytics-fill"
+          :class="item.color"
+          :style="{ width: item.percentage + '%' }"
+        ></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
     <form @submit.prevent="addApplication">
       <div class="field">
