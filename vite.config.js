@@ -4,7 +4,7 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
-  base: '/job-application-tracker/',
+  base: '/',
   plugins: [
     vue(),
     vueDevTools(),
